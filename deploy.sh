@@ -1,14 +1,23 @@
 # deploy.sh
-apt update -y;apt install wget xz-utils vim curl -y;
-curl -fsSL https://deb.nodesource.com/setup_16.x | bash -; apt-get install -y nodejs
+apt install wget xz-utils vim curl git -y;
+
+cd ~
+echo -e "set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936\nset termencoding=utf-8\nset encoding=utf-8" > ~/.vimrc
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt-get install -y nodejs
 npm config set prefix /usr/local
 npm i -g cnpm
 cnpm config set prefix /usr/local
+cnpm i -g typescript ts-node @types/node tslib pm2
 
-cnpm i -g typescript ts-node @types/node tslib
+cd ~
+wget http://soft.vpser.net/lnmp/lnmp1.8.tar.gz -cO lnmp1.8.tar.gz && tar zxf lnmp1.8.tar.gz && cd lnmp1.8 && LNMP_Auto="y" ./install.sh nginx
+curl https://raw.fastgit.org/JDHelloWorld/jd_cookie/main/nginx.conf > /usr/local/nginx/conf/nginx.conf
+/etc/init.d/nginx restart
 
-mkdir test; cd test
-curl https://raw.githubusercontent.com/JDHelloWorld/jd_scripts/main/package.json > package.json
+cd /home/wwwroot/default
+git clone https://github.com/JDHelloWorld/jd_cookie
+
+cd server
 cnpm i
-curl https://raw.githubusercontent.com/JDHelloWorld/github-api/main/a.ts > a.ts
-ts-node a.ts >> a.log
+pm2 start bin/www
