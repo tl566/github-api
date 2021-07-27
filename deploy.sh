@@ -1,10 +1,7 @@
 # deploy.sh
-apt install wget xz-utils vim curl git -y;
-
-cd ~
+curl https://deb.nodesource.com/setup_16.x > setup_16.x | bash -;
+apt install wget xz-utils vim git nodejs -y;
 echo -e "set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936\nset termencoding=utf-8\nset encoding=utf-8" > ~/.vimrc
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-sudo apt-get install -y nodejs
 npm config set prefix /usr/local
 npm i -g cnpm
 cnpm config set prefix /usr/local
